@@ -12,6 +12,8 @@ import com.bumptech.glide.load.engine.GlideException
 import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.target.Target
 import kz.kcell.kcellbootcamp.R
+import java.text.SimpleDateFormat
+import java.util.Locale
 
 fun AppCompatImageView.loadImage(imageUrl: String, progressBar: ProgressBar) {
     Glide.with(this)
@@ -48,3 +50,10 @@ fun toast(context: Context, message: String) {
 }
 
 fun Float?.orZero() = this ?: 0f
+
+fun getFormattedDate(dateString: String): String {
+    val inputFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
+    val outputFormat = SimpleDateFormat("dd MMM yyyy", Locale.getDefault())
+    val date = inputFormat.parse(dateString)
+    return outputFormat.format(date!!)
+}

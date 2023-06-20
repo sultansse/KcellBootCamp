@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.RecyclerView
 import kz.kcell.kcellbootcamp.BuildConfig
 import kz.kcell.kcellbootcamp.data.entities.Movie
 import kz.kcell.kcellbootcamp.databinding.MovieItemBinding
+import kz.kcell.kcellbootcamp.utils.getFormattedDate
 import kz.kcell.kcellbootcamp.utils.loadImage
 import kz.kcell.kcellbootcamp.utils.orZero
 
@@ -41,7 +42,7 @@ class MoviesAdapter(
                 onClick.invoke(item)
             }
             movieItemTitle.text = item.title
-            movieItemRelease.text = item.releaseDate
+            movieItemRelease.text = getFormattedDate(item.releaseDate)
             movieItemRatingbar.rating = item.voteAverage.toFloat().orZero()
             movieItemPoster.loadImage(
                 BuildConfig.IMAGE_URL + item.posterPath,
