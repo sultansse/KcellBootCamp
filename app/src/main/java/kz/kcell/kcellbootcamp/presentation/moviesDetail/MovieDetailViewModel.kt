@@ -12,13 +12,16 @@ import javax.inject.Inject
 
 @HiltViewModel
 class MovieDetailViewModel @Inject constructor(
-    private val repository: MovieRepository,
+    private val repository: MovieRepository
 ) : ViewModel() {
 
-    val id = MutableLiveData<Int>()
+    private val _id = MutableLiveData<Int>()
 
-    private val _content = id.switchMap {
-        repository.getMovie(it)
+    val content: LiveData<Resource<Movie>> = _id.switchMap { id ->
+        repository.getMovie(id)
     }
-    val content: LiveData<Resource<Movie>> = _content
+
+    fun onSetId(id: Int) {
+        _id.value = id
+    }
 }

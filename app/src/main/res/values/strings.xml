@@ -1,4 +1,6 @@
 <resources>
     <string name="app_name">KcellBootCamp</string>
     <string name="release">Release:</string>
+    <string name="movies_fragment_title">Popular movies</string>
+    <string name="movie_detail_fragment_title">movie_detail_fragment_title</string>
 </resources>

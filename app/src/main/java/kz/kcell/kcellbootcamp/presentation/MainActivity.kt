@@ -1,16 +1,17 @@
 package kz.kcell.kcellbootcamp.presentation
 
-import androidx.appcompat.app.AppCompatActivity
+import android.Manifest
+import android.content.pm.PackageManager
+import android.os.Build
 import android.os.Bundle
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.appcompat.app.AppCompatActivity
+import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupWithNavController
 import by.kirich1409.viewbindingdelegate.viewBinding
 import dagger.hilt.android.AndroidEntryPoint
-import android.Manifest
-import android.content.pm.PackageManager
-import android.os.Build
 import kz.kcell.kcellbootcamp.R
 import kz.kcell.kcellbootcamp.databinding.ActivityMainBinding
 import kz.kcell.kcellbootcamp.utils.toast
@@ -19,6 +20,7 @@ import kz.kcell.kcellbootcamp.utils.toast
 class MainActivity : AppCompatActivity(R.layout.activity_main) {
 
     private val binding by viewBinding(ActivityMainBinding::bind)
+    private lateinit var navController: NavController
     private val launcher = registerForActivityResult(
         ActivityResultContracts.RequestPermission()
     ) { isGranted ->
@@ -32,9 +34,13 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
         askNotificationPermission()
         val navHostFragment =
             supportFragmentManager.findFragmentById(R.id.navHostFragment) as NavHostFragment
-        val navController = navHostFragment.navController
+        navController = navHostFragment.navController
         val appBarConfiguration = AppBarConfiguration(navController.graph)
         binding.toolbar.setupWithNavController(navController, appBarConfiguration)
+    }
+
+    override fun onSupportNavigateUp(): Boolean {
+        return navController.navigateUp() || super.onSupportNavigateUp()
     }
 
     private fun askNotificationPermission() {

@@ -1,7 +1,10 @@
 package kz.kcell.kcellbootcamp.presentation.moviesDetail
 
+
 import android.os.Bundle
 import android.view.View
+import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import by.kirich1409.viewbindingdelegate.viewBinding
@@ -23,21 +26,22 @@ class MovieDetailFragment : Fragment(R.layout.fragment_movie_detail) {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        arguments?.getInt(ARG_MOVIE_ID)?.let { viewModel.id.postValue(it) }
+        val toolbar: Toolbar = requireActivity().findViewById(R.id.toolbar)
+        (requireActivity() as AppCompatActivity).setSupportActionBar(toolbar)
+
+        arguments?.getInt(ARG_MOVIE_ID)?.let { viewModel.onSetId(it) }
         setupObservers()
     }
 
     private fun setupObservers() {
-        viewModel.content.observe(viewLifecycleOwner) {
-            when (it.status) {
+        viewModel.content.observe(viewLifecycleOwner) { resource ->
+            when (resource.status) {
                 Resource.Status.SUCCESS -> {
-                    bindMovie(it.data)
+                    bindMovie(resource.data)
                     binding.progressBar.visibility = View.GONE
                 }
-
                 Resource.Status.ERROR ->
-                    it.message?.let { msg -> toast(requireContext(), msg) }
-
+                    resource.message?.let { msg -> toast(requireContext(), msg) }
                 Resource.Status.LOADING ->
                     binding.progressBar.visibility = View.VISIBLE
             }
@@ -46,6 +50,7 @@ class MovieDetailFragment : Fragment(R.layout.fragment_movie_detail) {
 
     private fun bindMovie(movie: Movie?) = with(binding) {
         movie?.let {
+            (requireActivity() as AppCompatActivity).supportActionBar?.title = movie.title
             movieItemTitle.text = movie.title
             detailDesc.text = movie.overview
             movieItemRelease.text = movie.releaseDate
